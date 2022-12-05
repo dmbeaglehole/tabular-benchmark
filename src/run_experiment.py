@@ -8,20 +8,18 @@ import platform
 import time
 import torch
 
-#os.environ["WANDB_MODE"] = "offline"
 
+def ohe_y(y):
+    """
+    takes binary (n,) -> (n,2)
+    """
+    
+    n = len(y)
+    new_y = np.zeros((n,2))
+    for i, y_i in enumerate(y):
+        new_y[i,y_i] = 1
+    return new_y
 
-# def modify_config(config):
-#     # To overcome wandb limitations on distribution specifications
-#     # To match Hyperopt-sklearn
-#     dic = {}
-#     for key in config.keys():
-#         dic[key] = config[key]
-#     if config["model_name"] == "xgb_c" or config["model_name"] == "xgb_r":
-#         dic["model__learning_rate"] = config["model__learning_rate"] - 0.0001
-#         dic["model__gamma"] = config["model__gamma"] - 0.0001
-#         dic["model__reg_alpha"] = config["model__reg_alpha"] - 0.0001
-#     return dic
 def train_model_on_config(config=None):
     print("GPU?")
     print(torch.cuda.device_count())
@@ -33,12 +31,13 @@ def train_model_on_config(config=None):
                       "val_test_prop": 0.3,
                       "max_val_samples": 50000,
                       "max_test_samples": 50000}
+    
     # "model__use_checkpoints": True} #TODO
     # Initialize a new wandb run
     with wandb.init(config=config) as run:
         run.config.update(CONFIG_DEFAULT)
         config = wandb.config
-        print(config)
+        print("config",config)
         # Modify the config in certain cases
         if config["model_name"] == "ft_transformer" or config["model_name"] == "ft_transformer_regressor":
             config["model__module__d_token"] = (config["d_token"] // config["model__module__n_heads"]) * config[
@@ -70,29 +69,39 @@ def train_model_on_config(config=None):
                 # if config["log_training"]: #FIXME
                 #    config["model__wandb_run"] = run
                 rng = np.random.RandomState(i)
-                print(rng.randn(1))
+#                 print(rng.randn(1))
                 # TODO: separate numeric and categorical features
                 t = time.time()
-                x_train, x_val, x_test, y_train, y_val, y_test, categorical_indicator = generate_dataset(config, rng)
+                x_train, x_val, x_test, y_train, y_val, y_test, categorical_indicator = generate_dataset(config, rng)      
+                
+                binary = False
+                if "model__args__objective" in config:
+                    if config["model__args__objective"]=="binary":
+                        binary=True
+                if binary:
+                    y_train = ohe_y(y_train)
+                    y_val = ohe_y(y_val)
+                    y_test = ohe_y(y_test)
+            
                 data_generation_time = time.time() - t
                 print("Data generation time:", data_generation_time)
-                # print(y_train)
-                print(x_train.shape)
+#                 print("Y shape",y_train.shape)
+#                 print("X shape",x_train.shape)
 
                 if config["model_type"] == "skorch" and config["regression"]:
                     print("YES")
                     y_train, y_val, y_test = y_train.reshape(-1, 1), y_val.reshape(-1, 1), y_test.reshape(-1, 1)
                     y_train, y_val, y_test = y_train.astype(np.float32), y_val.astype(np.float32), y_test.astype(
                         np.float32)
-                else:
-                    y_train, y_val, y_test = y_train.reshape(-1), y_val.reshape(-1), y_test.reshape(-1)
+#                 else:
+#                     y_train, y_val, y_test = y_train.reshape(-1), y_val.reshape(-1), y_test.reshape(-1)
                     # y_train, y_val, y_test = y_train.astype(np.float32), y_val.astype(np.float32), y_test.astype(np.float32)
                 x_train, x_val, x_test = x_train.astype(np.float32), x_val.astype(np.float32), x_test.astype(
                     np.float32)
 
                 start_time = time.time()
-                print(y_train.shape)
-                model, model_id = train_model(i, x_train, y_train, categorical_indicator, config)
+#                 print(y_train.shape)
+                model, model_id = train_model(i, x_train, y_train, x_val, y_val, categorical_indicator, config)
                 if config["regression"]:
                     try:
                         r2_train, r2_val, r2_test = evaluate_model(model, x_train, y_train, x_val, y_val, x_test,
@@ -104,6 +113,9 @@ def train_model_on_config(config=None):
                     r2_train_scores.append(r2_train)
                     r2_val_scores.append(r2_val)
                     r2_test_scores.append(r2_test)
+                    print("Train R2:", r2_train)
+                    print("Val R2:", r2_val)
+                    print("Test R2:", r2_test)
                 else:
                     r2_train, r2_val, r2_test = np.nan, np.nan, np.nan
                     r2_train_scores.append(r2_train)
@@ -214,6 +226,15 @@ def train_model_on_config(config=None):
 
 
 if __name__ == """__main__""":
+#     config = {"model_type": "sklearn",
+#               "model_name": "rf_c",
+#               "model__n_estimators": 100,
+#               "data__method_name": "real_data",
+#               "data__keyword": "california",
+#               "transform__0__method_name": "add_uninformative_features",
+#               "n_iter": 1,
+#               "max_train_samples": 10000}
+    
     # config = {"model_type": "sklearn",
     #           "model_name": "rf_c",
     #           "model__n_estimators": 100,

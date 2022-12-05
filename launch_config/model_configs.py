@@ -834,6 +834,9 @@ saint_config = {
     "transform__0__apply_on": {
         "value": "numerical",
     },
+    "transform_targets": {
+        "value": "numerical",
+    },
     "transformed_target": {
         "values": [False, True]
     },
@@ -929,6 +932,107 @@ saint_config_classif_default = dict(saint_config_default,
                             })
 
 
+############################
+# Ours (Feature Kernels) 
+############################
+
+ours_config = {
+    "model_type": {
+        "value": "iterated"
+    },
+    "bandwidth": {
+        "values": [10],
+    },
+    "model_name": {
+        "value": "ours"
+    },
+    "transformed_target": {
+        "value": False
+    },
+    "transform__0__apply_on": {
+        "value": "numerical",
+    },
+    "ridge": {
+        "values": [1e-5,1e-3,1e-1],
+    },
+    "kernel_solve": {
+        "value": "solve"
+    },
+   "transform__0__method_name": {
+       "value": "gaussienize"
+    },
+    "one_hot_encoder": {  # Use one-hot encoding for categorical variables when needed
+        "value": True
+    }
+}
+
+ours_config_default = {
+    "model_type": {
+        "value": "iterated"
+    },
+    "bandwidth": {
+        "values": [10],
+    },
+    "model_name": {
+        "value": "ours"
+    },
+    "transform__0__apply_on": {
+        "value": "numerical",
+    },
+    "ridge": {
+        "values": [10,1,1e-1,1e-2,1e-3],
+    },
+    "transform__0__type": {
+        "values": ["quantile","quantile_norm"],
+    },
+    "kernel_solve": {
+        "values": ["solve"]
+    },
+    "one_hot_encoder": {  # Use one-hot encoding for categorical variables when needed
+        "value": True
+    }
+}
+
+ours_config_regression = dict(ours_config,
+                               **{
+                                   "model__args__objective": {
+                                       "value": "regression",
+                                   },
+                                   "transform__0__method_name": {
+                                       "values": ["gaussienize_reg"]
+                                   }
+                               })
+
+ours_config_regression_default = dict(ours_config_default,
+                               **{
+                                   "model__args__objective": {
+                                       "value": "regression",
+                                   },
+                                   "transform__0__method_name": {
+                                       "values": ["gaussienize_reg"]
+                                   }
+                               })
+
+ours_config_classif = dict(ours_config,
+                       **{
+                           "model__args__objective": {
+                                    "value": "binary",
+                           },
+                           "transform__0__method_name": {
+                                       "values": ["gaussienize"]
+                           }
+                       })
+
+ours_config_classif_default = dict(ours_config_default,
+                           **{
+                               "model__args__objective": {
+                                    "value": "binary",
+                               },
+                               "transform__0__method_name": {
+                                       "values": ["gaussienize"]
+                               }
+                           })
+
 config_dic = {
     "gbt": {
         "classif": {"random": gbt_config_classif,
@@ -977,5 +1081,11 @@ config_dic = {
                     "default": saint_config_classif_default},
         "regression": {"random": saint_config_regression,
                             "default": saint_config_regression_default},
+    },
+    "ours": {
+        "classif": {"random": ours_config_classif,
+                    "default": ours_config_classif_default},
+        "regression": {"random": ours_config_regression,
+                            "default": ours_config_regression_default},
     }
 }

@@ -109,7 +109,7 @@ def gaussienize(x_train, x_val, x_test, y_train, y_val, y_test, type="standard",
         t = StandardScaler()
     elif type == "robust":
         t = RobustScaler()
-    elif type == "quantile":
+    elif (type == "quantile_norm") or (type == "quantile"):
         t = QuantileTransformer(output_distribution="normal", random_state=rng)
     elif type == "quantile_uniform":
         t = QuantileTransformer(output_distribution="uniform", random_state=rng)
@@ -119,7 +119,54 @@ def gaussienize(x_train, x_val, x_test, y_train, y_val, y_test, type="standard",
     x_train = t.fit_transform(x_train)
     x_val = t.transform(x_val)
     x_test = t.transform(x_test)
+    
+    if "quantile_norm":
+        x_train = normalize(x_train)
+        x_val = normalize(x_val)
+        x_test = normalize(x_test)
+    
+    return x_train, x_val, x_test, y_train, y_val, y_test
 
+def gaussienize_reg(x_train, x_val, x_test, y_train, y_val, y_test, type="quantile", rng=None):
+    """
+    Gaussienize the data
+    :param x: data to transform
+    :param type: {"standard","robust", "quantile", "power", "quantile_uniform"}
+    :return: the transformed data
+    """
+    print("Gaussienizing")
+    if type == "identity":
+        return x_train, x_val, x_test, y_train, y_val, y_test
+    if type == "standard":
+        t = StandardScaler()
+    elif type == "robust":
+        t = RobustScaler()
+    elif (type == "quantile_norm") or (type == "quantile"):
+        t = QuantileTransformer(output_distribution="normal", random_state=rng)
+    elif type == "quantile_uniform":
+        t = QuantileTransformer(output_distribution="uniform", random_state=rng)
+    elif type == "power":
+        t = PowerTransformer(random_state=rng)
+
+    x_train = t.fit_transform(x_train)
+    x_val = t.transform(x_val)
+    x_test = t.transform(x_test)
+    
+    if "quantile_norm":
+        x_train = normalize(x_train)
+        x_val = normalize(x_val)
+        x_test = normalize(x_test)
+        
+    center = np.mean(y_train)+0
+    y_train -= center
+    y_val -= center
+    y_test -= center
+    
+    scale = np.var(y_train)+0
+    y_train /= scale
+    y_val /= scale
+    y_test /= scale
+    
     return x_train, x_val, x_test, y_train, y_val, y_test
 
 

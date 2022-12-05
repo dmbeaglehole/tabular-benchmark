@@ -17,6 +17,7 @@ def generate_data(config, rng):
     for key in config.keys():
         if key.startswith("data__") and key != "data__method_name":
             data_config[key[len("data__"):]] = config[key]
+#     print("data_config",data_config)
     data = method(**data_config, rng=rng)
     return data
 

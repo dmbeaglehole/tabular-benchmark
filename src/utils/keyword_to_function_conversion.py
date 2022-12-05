@@ -1,51 +1,53 @@
 from target_function_classif import *
 from generate_data import *
 from data_transforms import *
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor, GradientBoostingClassifier, GradientBoostingRegressor, HistGradientBoostingRegressor, HistGradientBoostingClassifier
-from xgboost import XGBClassifier, XGBRegressor
-from skorch_models import create_resnet_skorch, create_ft_transformer_skorch, create_rtdl_mlp_skorch#, create_NPT_skorch
-from skorch_models_regression import create_resnet_regressor_skorch, create_ft_transformer_regressor_skorch, create_rtdl_mlp_regressor_skorch
-from rotation_forest import RotationForestClassifier
-from TabSurvey.models.saint import SAINT
+# from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor, GradientBoostingClassifier, GradientBoostingRegressor, HistGradientBoostingRegressor, HistGradientBoostingClassifier
+# from xgboost import XGBClassifier, XGBRegressor
+# from skorch_models import create_resnet_skorch, create_ft_transformer_skorch, create_rtdl_mlp_skorch#, create_NPT_skorch
+# from skorch_models_regression import create_resnet_regressor_skorch, create_ft_transformer_regressor_skorch, create_rtdl_mlp_regressor_skorch
+# from rotation_forest import RotationForestClassifier
+# from TabSurvey.models.saint import SAINT
 
 
 def convert_keyword_to_function(keyword):
-    print(keyword)
+    print("keyword",keyword)
     #if keyword == "npt":
     #    return create_NPT_skorch
-    if keyword == "rotation_forest":
-        return RotationForestClassifier
-    if keyword == "rtdl_mlp":
-        return create_rtdl_mlp_skorch
-    if keyword == 'rtdl_mlp_regressor':
-        return create_rtdl_mlp_regressor_skorch
-    if keyword == "ft_transformer":
-        return create_ft_transformer_skorch
-    if keyword == "ft_transformer_regressor":
-        return create_ft_transformer_regressor_skorch
-    if keyword == "rtdl_resnet":
-        return create_resnet_skorch
-    if keyword == "rtdl_resnet_regressor":
-        return create_resnet_regressor_skorch
-    if keyword == "rf_c":
-        return RandomForestClassifier
-    if keyword == "rf_r":
-        return RandomForestRegressor
-    if keyword == "gbt_c":
-        return GradientBoostingClassifier
-    if keyword == "gbt_r":
-        return GradientBoostingRegressor
-    if keyword == "hgbt_r":
-        return HistGradientBoostingRegressor
-    if keyword == "hgbt_c":
-        return HistGradientBoostingClassifier
-    if keyword == "xgb_c":
-        return XGBClassifier
-    if keyword == "xgb_r":
-        return XGBRegressor
-    if keyword == "saint":
-        return SAINT
-    elif keyword == "uniform_data":
+#     if keyword == "ours":
+#         return None
+#     if keyword == "rotation_forest":
+#         return RotationForestClassifier
+#     if keyword == "rtdl_mlp":
+#         return create_rtdl_mlp_skorch
+#     if keyword == 'rtdl_mlp_regressor':
+#         return create_rtdl_mlp_regressor_skorch
+#     if keyword == "ft_transformer":
+#         return create_ft_transformer_skorch
+#     if keyword == "ft_transformer_regressor":
+#         return create_ft_transformer_regressor_skorch
+#     if keyword == "rtdl_resnet":
+#         return create_resnet_skorch
+#     if keyword == "rtdl_resnet_regressor":
+#         return create_resnet_regressor_skorch
+#     if keyword == "rf_c":
+#         return RandomForestClassifier
+#     if keyword == "rf_r":
+#         return RandomForestRegressor
+#     if keyword == "gbt_c":
+#         return GradientBoostingClassifier
+#     if keyword == "gbt_r":
+#         return GradientBoostingRegressor
+#     if keyword == "hgbt_r":
+#         return HistGradientBoostingRegressor
+#     if keyword == "hgbt_c":
+#         return HistGradientBoostingClassifier
+#     if keyword == "xgb_c":
+#         return XGBClassifier
+#     if keyword == "xgb_r":
+#         return XGBRegressor
+#     if keyword == "saint":
+#         return SAINT
+    if keyword == "uniform_data":
         return generate_uniform_data
     elif keyword == "periodic_triangle":
         return periodic_triangle
@@ -53,6 +55,8 @@ def convert_keyword_to_function(keyword):
         return import_real_data
     elif keyword == "gaussienize":
         return gaussienize
+    elif keyword == "gaussienize_reg":
+        return gaussienize_reg
     elif keyword == "select_features_rf":
         return select_features_rf
     elif keyword == "remove_features_rf":

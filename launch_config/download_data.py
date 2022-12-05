@@ -3,16 +3,16 @@ import pandas as pd
 import wandb
 import time
 
-WANDB_ID = "default"#INSERT WANDB ENTITY
+WANDB_ID = "rfm"#INSERT WANDB ENTITY
 
 api = wandb.Api()
 
 
-sweep_id_filename = "launch_config/sweeps/xps_sweeps.csv"
-#weep_id_filename = "sweeps/benchmark_sweeps.csv"
+#sweep_id_filename = "launch_config/sweeps/xps_sweeps.csv"
+sweep_id_filename = "launch_config/sweeps/benchmark_sweeps.csv"
 
-output_filename = "launch_config/results/xps_results.csv"
-#output_filename = "results/benchmark_results.csv"
+#output_filename = "launch_config/results/xps_results.csv"
+output_filename = "launch_config/results/benchmark_results.csv"
 
 df = pd.read_csv(sweep_id_filename)
 sweeps = iter([api.sweep(f"{WANDB_ID}/{row['project']}/{row['sweep_id']}") for i, row in df.iterrows()])
