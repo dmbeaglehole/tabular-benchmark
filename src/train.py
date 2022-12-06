@@ -189,9 +189,9 @@ def train_model(iter, x_train, y_train, x_val, y_val, categorical_indicator, con
             model = eigenpro_rfm.train(x_train, y_train, x_val, y_val, L=L, classification=classification) # change 5
         elif config["kernel_solve"] == "lstsq":
             model = rfm.train(x_train, y_train, x_val, y_val, L=L, reg=reg, classification=classification,
-                              transform=False, use_lstsq=True)
+                              use_lstsq=True)
         else:
-            model = rfm.train(x_train, y_train, x_val, y_val, L=L, reg=reg, transform=False, classification=classification) # change 5
+            model = rfm.train(x_train, y_train, x_val, y_val, L=L, reg=reg, classification=classification) # change 5
         
     elif config["model_type"] == "tab_survey":
         x_val = x_train[int(len(x_train) * 0.8):]

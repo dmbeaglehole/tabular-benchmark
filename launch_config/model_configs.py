@@ -976,6 +976,9 @@ ours_config_default = {
     "model_name": {
         "value": "ours"
     },
+    "transformed_target": {
+        "value": False
+    },
     "transform__0__apply_on": {
         "value": "numerical",
     },
@@ -983,7 +986,8 @@ ours_config_default = {
         "values": [10,1,1e-1,1e-2,1e-3],
     },
     "transform__0__type": {
-        "values": ["quantile","quantile_norm"],
+        "values": ["quantile","quantile_norm"]
+        #"values": ["quantile_norm"],
     },
     "kernel_solve": {
         "values": ["solve"]

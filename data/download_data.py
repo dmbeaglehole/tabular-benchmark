@@ -32,24 +32,26 @@ suites_id = {"numerical_regression": 297,
           "categorical_regression": 299,
           "categorical_classification": 304}
 
+data_path = os.environ['DATA_PATH']
+print("data path",data_path)
 print("Saving datasets from suite: {}".format("numerical_regression"))
 save_suite(suites_id["numerical_regression"],
-           "data/numerical_only/regression",
+           data_path+"data/numerical_only/regression",
            save_categorical_indicator=False)
 
 print("Saving datasets from suite: {}".format("numerical_classification"))
 save_suite(suites_id["numerical_classification"],
-           "data/numerical_only/balanced",
+           data_path + "data/numerical_only/balanced",
            save_categorical_indicator=False,
            regression=False)
 
 print("Saving datasets from suite: {}".format("categorical_regression"))
 save_suite(suites_id["categorical_regression"],
-           "data/num_and_cat/regression",
+           data_path + "data/num_and_cat/regression",
            save_categorical_indicator=True)
 
 print("Saving datasets from suite: {}".format("categorical_classification"))
 save_suite(suites_id["categorical_classification"],
-           "data/num_and_cat/balanced",
+           data_path + "data/num_and_cat/balanced",
            save_categorical_indicator=True,
            regression=False)

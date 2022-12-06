@@ -6,6 +6,7 @@ from sklearn.datasets import make_spd_matrix, make_sparse_spd_matrix
 from sklearn.preprocessing import LabelEncoder, QuantileTransformer
 import openml
 import pickle
+import os
 
 
 def import_open_ml_data(openml_task_id=None, path_to_dir="openML_data", max_num_samples=None, rng=None) -> pd.DataFrame:
@@ -63,7 +64,7 @@ def import_open_ml_data(openml_task_id=None, path_to_dir="openML_data", max_num_
     return X, y
 
 
-def import_real_data(keyword=None, balanced=True, path_to_dir="../data", max_num_samples=None, regression=False, categorical=False, dim=[],
+def import_real_data(keyword=None, balanced=True, path_to_dir=os.environ['DATA_PATH']+"data", max_num_samples=None, regression=False, categorical=False, dim=[],
                      rng=None):
     if not categorical:
         if regression:

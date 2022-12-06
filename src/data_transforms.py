@@ -8,7 +8,15 @@ from sklearn.model_selection import train_test_split
 import utils.keyword_to_function_conversion
 from scipy.stats import multivariate_normal
 from sklearn.covariance import EmpiricalCovariance, MinCovDet
+import torch
 
+def normalize(X,axis=-1):
+    if torch.is_tensor(X):
+        X1 = X / torch.unsqueeze(torch.linalg.norm(X,axis=axis),dim=-1)
+        return torch.nan_to_num(X1)
+    else:
+        X1 = X / np.expand_dims(np.linalg.norm(X,axis=axis),axis=-1)
+        return np.nan_to_num(X1)
 
 def marginal_transformations(x, y, function, vectorized=False, rng=None):
     """
@@ -121,6 +129,7 @@ def gaussienize(x_train, x_val, x_test, y_train, y_val, y_test, type="standard",
     x_test = t.transform(x_test)
     
     if "quantile_norm":
+        print("normalizing")
         x_train = normalize(x_train)
         x_val = normalize(x_val)
         x_test = normalize(x_test)
@@ -153,6 +162,7 @@ def gaussienize_reg(x_train, x_val, x_test, y_train, y_val, y_test, type="quanti
     x_test = t.transform(x_test)
     
     if "quantile_norm":
+        print("normalizing")
         x_train = normalize(x_train)
         x_val = normalize(x_val)
         x_test = normalize(x_test)

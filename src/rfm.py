@@ -8,8 +8,6 @@ import matplotlib.pyplot as plt
 import classic_kernel
 import time
 from tqdm import tqdm
-import hickle
-from data.data_utils import transform_target
 
 from copy import deepcopy
 
@@ -145,12 +143,8 @@ def get_grads(X, sol, L, P):
     return M
 
 
-def train(X_train, y_train, X_val, y_val, L, reg, iters=5, classification=True, transform=False, use_lstsq=False):
+def train(X_train, y_train, X_val, y_val, L, reg, iters=5, classification=True, use_lstsq=False):
     
-    
-#     if (not classification) and transform:
-#         y_train = transform_target(y_train)
-#         y_val = transform_target(y_val)
         
     if len(y_train.shape)==1:
         y_train = y_train[:,None]

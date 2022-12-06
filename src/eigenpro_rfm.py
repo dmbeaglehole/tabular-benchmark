@@ -7,7 +7,6 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy.linalg import svd, solve, norm
-import hickle
 from tqdm import tqdm
 import torch.multiprocessing
 torch.multiprocessing.set_sharing_strategy('file_system')

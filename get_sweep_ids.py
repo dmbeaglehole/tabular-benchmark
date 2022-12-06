@@ -11,7 +11,7 @@
 
 
 def write_sweep_ids():
-    sweep_path = "/home/dbeagl/neural_feature_kernels/tabular-benchmark/launch_config/sweeps/benchmark_sweeps.csv"
+    sweep_path = "/u/dbeaglehole/tabular-benchmark/launch_config/sweeps/benchmark_sweeps.csv"
     
     sweep_ids=[]
     with open(sweep_path,"r") as f:
@@ -19,7 +19,7 @@ def write_sweep_ids():
             sweep_id = line.split(",")[0]
             sweep_ids.append(sweep_id)
     
-    new_path = "/home/dbeagl/neural_feature_kernels/tabular-benchmark/sweep_ids.txt"
+    new_path = "/u/dbeaglehole/tabular-benchmark/sweep_ids.txt"
     with open(new_path,"w") as f:
         # datasets=("OnlineNewsPopularity" "parkinsons" "superconduct" "energy")
         f.write("(")
