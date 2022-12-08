@@ -983,10 +983,11 @@ ours_config_default = {
         "value": "numerical",
     },
     "ridge": {
-        "values": [10,1,1e-1,1e-2,1e-3],
+        "values": [1e-1,1e-2,1e-3,1e-4],
     },
     "transform__0__type": {
-        "values": ["quantile","quantile_norm"]
+        "values":["standard"]
+        #"values": ["quantile","quantile_norm"]
         #"values": ["quantile_norm"],
     },
     "kernel_solve": {

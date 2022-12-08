@@ -113,7 +113,7 @@ def gaussienize(x_train, x_val, x_test, y_train, y_val, y_test, type="standard",
     print("Gaussienizing")
     if type == "identity":
         return x_train, x_val, x_test, y_train, y_val, y_test
-    if type == "standard":
+    if (type == "standard") or (type == "standard_norm"):
         t = StandardScaler()
     elif type == "robust":
         t = RobustScaler()
@@ -128,7 +128,7 @@ def gaussienize(x_train, x_val, x_test, y_train, y_val, y_test, type="standard",
     x_val = t.transform(x_val)
     x_test = t.transform(x_test)
     
-    if "quantile_norm":
+    if "norm" in type:
         print("normalizing")
         x_train = normalize(x_train)
         x_val = normalize(x_val)
@@ -146,7 +146,7 @@ def gaussienize_reg(x_train, x_val, x_test, y_train, y_val, y_test, type="quanti
     print("Gaussienizing")
     if type == "identity":
         return x_train, x_val, x_test, y_train, y_val, y_test
-    if type == "standard":
+    if (type == "standard") or (type == "standard_norm"):
         t = StandardScaler()
     elif type == "robust":
         t = RobustScaler()
@@ -161,7 +161,7 @@ def gaussienize_reg(x_train, x_val, x_test, y_train, y_val, y_test, type="quanti
     x_val = t.transform(x_val)
     x_test = t.transform(x_test)
     
-    if "quantile_norm":
+    if "norm" in type:
         print("normalizing")
         x_train = normalize(x_train)
         x_val = normalize(x_val)

@@ -71,25 +71,25 @@ benchmarks = [
 #                   "dataset_size": "medium",
 #                   "categorical": False,
 #                   "datasets":  ["year"]},
-
-                 {"task": "regression",
-                    "dataset_size": "large",
-                    "categorical": False,
-                    "datasets": ["diamonds"]
-                 },
-
-                 {"task": "regression",
-                    "dataset_size": "large",
-                    "categorical": False,
-                    "datasets": ["nyc-taxi-green-dec-2016"]
-                 },
-    
-                {"task": "regression",
-                    "dataset_size": "large",
-                    "categorical": False,
-                    "datasets": ["year"]
-                 },
-
+#
+#                {"task": "regression",
+#                   "dataset_size": "large",
+#                   "categorical": False,
+#                   "datasets": ["diamonds"]
+#                },
+#
+#                {"task": "regression",
+#                   "dataset_size": "large",
+#                   "categorical": False,
+#                   "datasets": ["nyc-taxi-green-dec-2016"]
+#                },
+#   
+#               {"task": "regression",
+#                   "dataset_size": "large",
+#                   "categorical": False,
+#                   "datasets": ["year"]
+#                },
+#
 #                {"task": "classif",
 #                    "dataset_size": "medium",
 #                    "categorical": False,
@@ -128,67 +128,67 @@ benchmarks = [
 #                    "datasets": ["credit",
 #                                 "california",
 #                                 "wine"]},
-                
+#               
+#
+#               {"task": "classif",
+#                   "dataset_size": "large",
+#                   "categorical": False,
+#                   "datasets": ["MiniBooNE"]
+#               },
+#
+#               {"task": "classif",
+#                   "dataset_size": "large",
+#                   "categorical": False,
+#                   "datasets": ["covertype"]
+#               },
+#
+#               {"task": "classif",
+#                   "dataset_size": "large",
+#                   "categorical": False,
+#                   "datasets": ["Higgs",
+#                                "jannis"]
+#                },
 
-                {"task": "classif",
-                    "dataset_size": "large",
-                    "categorical": False,
-                    "datasets": ["MiniBooNE"]
-                },
-
-                {"task": "classif",
-                    "dataset_size": "large",
-                    "categorical": False,
-                    "datasets": ["covertype"]
-                },
-
-                {"task": "classif",
-                    "dataset_size": "large",
-                    "categorical": False,
-                    "datasets": ["Higgs",
-                                 "jannis"]
-                 },
-
-                #{"task": "regression",
-                #    "dataset_size": "medium",
-                #    "categorical": True,
-                # "datasets": ["yprop_4_1"]},
+               {"task": "regression",
+                   "dataset_size": "medium",
+                   "categorical": True,
+               "datasets": ["yprop_4_1"]},
     
-                #{"task": "regression",
-                #    "dataset_size": "medium",
-                #    "categorical": True,
-                # "datasets": ["analcatdata_supreme"]},
+                {"task": "regression",
+                    "dataset_size": "medium",
+                    "categorical": True,
+                 "datasets": ["analcatdata_supreme"]},
 
-                #{"task": "regression",
-                #    "dataset_size": "medium",
-                #    "categorical": True,
-                # "datasets": ["visualizing_soil",
-                #             "black_friday",
-                #             "nyc-taxi-green-dec-2016"]},
+               {"task": "regression",
+                    "dataset_size": "medium",
+                   "categorical": True,
+                 "datasets": ["visualizing_soil",
+                             "black_friday",
+                             "nyc-taxi-green-dec-2016"]},
+             
+               {"task": "regression",
+                   "dataset_size": "medium",
+                    "categorical": True,
+                 "datasets": ["diamonds",
+                             "Mercedes_Benz_Greener_Manufacturing"]},
+
+                 {"task": "regression",
+                    "dataset_size": "medium",
+                    "categorical": True,
+                 "datasets": ["Brazilian_houses",
+                            "Bike_Sharing_Demand"]},
               
-                # {"task": "regression",
-                #    "dataset_size": "medium",
-                #    "categorical": True,
-                # "datasets": ["diamonds",
-                #             "Mercedes_Benz_Greener_Manufacturing"]},
+                 {"task": "regression",
+                    "dataset_size": "medium",
+                    "categorical": True,
+                 "datasets": ["OnlineNewsPopularity",
+                             "house_sales"]},
 
-                # {"task": "regression",
-                #    "dataset_size": "medium",
-                #    "categorical": True,
-                # "datasets": ["Brazilian_houses",
-                #            "Bike_Sharing_Demand"]},
-              
-                # {"task": "regression",
-                #    "dataset_size": "medium",
-                #    "categorical": True,
-                # "datasets": ["OnlineNewsPopularity",
-                #             "house_sales"]},
-
-                # {"task": "regression",
-                #    "dataset_size": "medium",
-                #    "categorical": True,
-                # "datasets": ["particulate-matter-ukair-2017",
-                #             "SGEMM_GPU_kernel_performance"]},
+                 {"task": "regression",
+                    "dataset_size": "medium",
+                    "categorical": True,
+                 "datasets": ["particulate-matter-ukair-2017",
+                             "SGEMM_GPU_kernel_performance"]},
 
                 {"task": "regression",
                  "dataset_size": "large",
@@ -216,36 +216,36 @@ benchmarks = [
                  "categorical": True,
                  "datasets": ["SGEMM_GPU_kernel_performance"]
                  },
-                #{"task": "classif",
-                #    "dataset_size": "medium",
-                #    "categorical": True,
-                #    "datasets": ["electricity",
-                #                "eye_movements",
-                #                  "KDDCup09_upselling"]},
-
-                #{"task": "classif",
-                #    "dataset_size": "medium",
-                #    "categorical": True,
-                #    "datasets": ["covertype",
-                #                  "rl"]},
-
-                #{"task": "classif",
-                #    "dataset_size": "medium",
-                #    "categorical": True,
-                #    "datasets": ["road-safety",
-                #                  "compass"]},
-
-                {"task": "classif",
-                    "dataset_size": "large",
-                    "categorical": True,
-                    "datasets": ["covertype"]
-                },
-
-                {"task": "classif",
-                    "dataset_size": "large",
-                    "categorical": True,
-                    "datasets": ["road-safety"]
-                }
+#                {"task": "classif",
+#                    "dataset_size": "medium",
+#                    "categorical": True,
+#                    "datasets": ["electricity",
+#                                "eye_movements",
+#                                  "KDDCup09_upselling"]},
+#
+#                {"task": "classif",
+#                    "dataset_size": "medium",
+#                    "categorical": True,
+#                    "datasets": ["covertype",
+#                                  "rl"]},
+#
+#                {"task": "classif",
+#                    "dataset_size": "medium",
+#                    "categorical": True,
+#                    "datasets": ["road-safety",
+#                                  "compass"]},
+#
+#                {"task": "classif",
+#                    "dataset_size": "large",
+#                    "categorical": True,
+#                    "datasets": ["covertype"]
+#                },
+#
+#                {"task": "classif",
+#                    "dataset_size": "large",
+#                    "categorical": True,
+#                    "datasets": ["road-safety"]
+#                }
 ]
 
 #models = ["gbt", "rf", "xgb", "hgbt",

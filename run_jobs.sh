@@ -1,4 +1,4 @@
-sweeps=("5mkato5z" "jalfc0wj" "f95gw8f9" "ok1z50r0" "0wb81axn" "8631xj0j" "8la3gqr3" "lfkh5k8e" "gnrdr2cs" "lrwgcqt2" "zbwr57si" "72omn5yr" "8jbbf39z")
+sweeps=("ql723dgt" "radsnftn" "5ekzhoiv" "kcg4t57e" "xwd1c2md" "3q93al19" "y9zq87hy" "sgv2vrgg" "pkhrfd5v" "1kwneq6p" "fgppbfjz" "3eu5bld4")
 
 
 for id in ${sweeps[@]}; do
