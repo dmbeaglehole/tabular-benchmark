@@ -3,13 +3,19 @@
 import torch
 import numpy as np
 
+def convert_to_tensor(x):
+    if isinstance(x, np.ndarray):
+        x = torch.from_numpy(x)
+    elif not isinstance(x, torch.Tensor):
+        x = torch.from_numpy(x.toarray())
+    return x
 
 def euclidean_distances(samples, centers, squared=True):
-    if isinstance(samples, np.ndarray):
-        samples = torch.from_numpy(samples)
-    if isinstance(centers, np.ndarray):
-        centers = torch.from_numpy(centers)
+    samples = convert_to_tensor(samples)
+    centers = convert_to_tensor(centers)
     
+    print("centers",centers.shape)
+    print("samples",samples.shape)
     samples_norm = torch.sum(samples**2, dim=1, keepdim=True)
     if samples is centers:
         centers_norm = samples_norm
@@ -21,7 +27,6 @@ def euclidean_distances(samples, centers, squared=True):
     distances.mul_(-2)
     distances.add_(samples_norm)
     distances.add_(centers_norm)
-    #print(centers_norm.size(), samples_norm.size(), distances.size())
     if not squared:
         distances.clamp_(min=0)
         distances.sqrt_()
@@ -30,15 +35,15 @@ def euclidean_distances(samples, centers, squared=True):
 
 
 def euclidean_distances_M(samples, centers, M, squared=True):
+   
+    samples = convert_to_tensor(samples)
+    centers = convert_to_tensor(centers)
+    M = convert_to_tensor(M)
     
-    if isinstance(samples, np.ndarray):
-        samples = torch.from_numpy(samples)
-    if isinstance(centers, np.ndarray):
-        centers = torch.from_numpy(centers)
-    if isinstance(M, np.ndarray):
-        M = torch.from_numpy(M)
-    
-    samples_norm = (samples @ M)  * samples
+    print("centers",centers.shape)
+    print("samples",samples.shape)
+    print("M",M.shape)
+    samples_norm = (samples @ M) * samples
     samples_norm = torch.sum(samples_norm, dim=1, keepdim=True)
 
     if samples is centers:
@@ -84,7 +89,7 @@ def gaussian(samples, centers, bandwidth):
     return kernel_mat
 
 
-def laplacian(samples, centers, bandwidth):
+def laplacian(samples, centers, bandwidth=10):
     '''Laplacian kernel.
 
     Args:

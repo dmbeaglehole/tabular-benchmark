@@ -72,8 +72,31 @@ def train_model_on_config(config=None):
 #                 print(rng.randn(1))
                 # TODO: separate numeric and categorical features
                 t = time.time()
-                x_train, x_val, x_test, y_train, y_val, y_test, categorical_indicator = generate_dataset(config, rng)      
+                x_train, x_val, x_test, y_train, y_val, y_test, categorical_indicator = generate_dataset(config, rng)
+
+                if not isinstance(x_train,np.ndarray):
+                    x_train = x_train.toarray()
+                if not isinstance(x_val,np.ndarray):
+                    x_val = x_val.toarray()
+                if not isinstance(x_test,np.ndarray):
+                    x_test = x_test.toarray()
+                if not isinstance(y_train,np.ndarray):
+                    y_train = y_train.toarray()
+                if not isinstance(y_val,np.ndarray):
+                    y_val = y_val.toarray()
+                if not isinstance(y_test,np.ndarray):
+                    y_test = y_test.toarray()
                 
+                
+                if config["data__categorical"] and "one_hot_encoder" in config.keys() and config["one_hot_encoder"]:
+                    preprocessor = ColumnTransformer([("one_hot", OneHotEncoder(categories="auto", handle_unknown="ignore"),
+                                                       [i for i in range(x_train.shape[1]) if categorical_indicator[i]]),
+                                                      ("numerical", "passthrough",
+                                                       [i for i in range(x_train.shape[1]) if not categorical_indicator[i]])])
+                    x_train = preprocessor.fit_transform(x_train)
+                    x_val = preprocessor.transform(x_val)
+                    x_test = preprocessor.transform(x_test)
+
                 binary = False
                 if "model__args__objective" in config:
                     if config["model__args__objective"]=="binary":
@@ -101,6 +124,16 @@ def train_model_on_config(config=None):
 
                 start_time = time.time()
 #                 print(y_train.shape)
+                print("train type",type(x_train))
+                print("val type",type(x_val))
+                print("test type",type(x_test))
+                if not isinstance(x_train,np.ndarray):
+                    x_train = x_train.toarray()
+                if not isinstance(x_val,np.ndarray):
+                    x_val = x_val.toarray()
+                if not isinstance(x_test,np.ndarray):
+                    x_test = x_test.toarray()
+
                 model, model_id = train_model(i, x_train, y_train, x_val, y_val, categorical_indicator, config)
                 if config["regression"]:
                     try:

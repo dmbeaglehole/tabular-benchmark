@@ -963,7 +963,7 @@ ours_config = {
     },
     "one_hot_encoder": {  # Use one-hot encoding for categorical variables when needed
         "value": True
-    }
+    },
 }
 
 ours_config_default = {
@@ -977,17 +977,25 @@ ours_config_default = {
         "value": "ours"
     },
     "transformed_target": {
-        "value": False
+        #"values": [False]
+        "values": ["log"]
+        #"values": [False,"log"]
+        #"values": ["quantile"]
     },
     "transform__0__apply_on": {
         "value": "numerical",
     },
     "ridge": {
-        "values": [1e-1,1e-2,1e-3,1e-4],
+        "values": [1,1e-1,1e-2,1e-3],
+    },
+   "transform__0__method_name": {
+       #"value": "gaussienize"
+       "value": "gaussienize_reg"
     },
     "transform__0__type": {
         "values":["standard"]
-        #"values": ["quantile","quantile_norm"]
+        #"values": ["quantile"]
+        #"values": ["standard","quantile"]
         #"values": ["quantile_norm"],
     },
     "kernel_solve": {
@@ -995,6 +1003,22 @@ ours_config_default = {
     },
     "one_hot_encoder": {  # Use one-hot encoding for categorical variables when needed
         "value": True
+    },
+    "n_iters":{
+        "value":5
+    },
+    "kernel": {
+        "values": ["laplace"]#["laplace"]#,"gaussian"]
+        #"values": ["laplace"]#["laplace"]#,"gaussian"]
+    },
+    "threshold": {
+        "value": False
+    },
+    "center_grads": {
+        "value": False 
+    },
+    "use_diagonal": {
+        "value": True 
     }
 }
 
@@ -1003,9 +1027,6 @@ ours_config_regression = dict(ours_config,
                                    "model__args__objective": {
                                        "value": "regression",
                                    },
-                                   "transform__0__method_name": {
-                                       "values": ["gaussienize_reg"]
-                                   }
                                })
 
 ours_config_regression_default = dict(ours_config_default,
@@ -1013,9 +1034,6 @@ ours_config_regression_default = dict(ours_config_default,
                                    "model__args__objective": {
                                        "value": "regression",
                                    },
-                                   "transform__0__method_name": {
-                                       "values": ["gaussienize_reg"]
-                                   }
                                })
 
 ours_config_classif = dict(ours_config,
@@ -1035,7 +1053,10 @@ ours_config_classif_default = dict(ours_config_default,
                                },
                                "transform__0__method_name": {
                                        "values": ["gaussienize"]
-                               }
+                               },
+                               "svm": {
+                                    "values":[False]
+                               },
                            })
 
 config_dic = {

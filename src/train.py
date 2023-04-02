@@ -75,25 +75,27 @@ def sklearn_evaluation(fitted_model, x_train, x_val, x_test, y_train, y_val, y_t
     """
     Evaluate a fitted model from sklearn
     """
-    
+
     if config["model_type"]=="iterated": 
-        y_hat_train = fitted_model.predict(x_train, x_train)
-        y_hat_val = fitted_model.predict(x_train, x_val)
-        y_hat_test = fitted_model.predict(x_train, x_test)
+        if ("svm" in config.keys()) and config["svm"]:
+            y_hat_train = fitted_model.predict(x_train)
+            y_hat_val = fitted_model.predict(x_val)
+            y_hat_test = fitted_model.predict(x_test)
+        else:
+            y_hat_train = fitted_model.predict(x_train, X_train=x_train)
+            y_hat_val = fitted_model.predict(x_val, X_train=x_train)
+            y_hat_test = fitted_model.predict(x_test, X_train=x_train)
+
+        if config["regression"]==False:
+            if ("svm" not in config.keys()) or config["svm"]==False:
+                y_hat_train = np.argmax(y_hat_train, axis=-1)
+                y_hat_val = np.argmax(y_hat_val, axis=-1)
+                y_hat_test = np.argmax(y_hat_test, axis=-1)
+
+            y_train = np.argmax(y_train, axis=-1)
+            y_val = np.argmax(y_val, axis=-1)
+            y_test = np.argmax(y_test, axis=-1)
         
-        print("y_hat_train shape",y_hat_train.shape)
-        print("y_train shape",y_train.shape)
-        
-        if "regression" in config.keys() and not config["regression"]: 
-            print("Classification eval")
-            y_hat_train = np.argmax(y_hat_train,axis=-1)
-            y_hat_val = np.argmax(y_hat_val,axis=-1)
-            y_hat_test = np.argmax(y_hat_test,axis=-1)
-            
-            y_train = np.argmax(y_train,axis=-1)
-            y_val = np.argmax(y_val,axis=-1)
-            y_test = np.argmax(y_test,axis=-1)
-            
     else:
         y_hat_train = fitted_model.predict(x_train)
         y_hat_val = fitted_model.predict(x_val)
@@ -165,33 +167,84 @@ def train_model(iter, x_train, y_train, x_val, y_val, categorical_indicator, con
         id = hash(".".join(list(config.keys())) + "." + str(iter)) # uniquely identify the run (useful for checkpointing)
         model_raw = create_model(config, categorical_indicator, num_features=x_train.shape[1], id=id,
                                  cat_dims=list((x_train[:, categorical_indicator].max(0) + 1).astype(int)))
+    elif config["model_type"] == "iterated":
+        id = None
+        if ("svm" in config.keys()) and config["svm"]:
+            model_raw = rfm.SVMKernel()
+        else:
+            model_raw = rfm.Kernel(config["kernel"])
+
+        if "threshold" in config.keys() and config["threshold"]:
+            print("threshold is True")
+            model_raw.threshold = True
+        else:
+            model_raw.threshold = False
+
     else:
         id = None
 
-    if config["regression"] and config["transformed_target"]:
+    if config["regression"] and (config["transformed_target"] == "quantile"):
         model = TransformedTargetRegressor(model_raw, transformer=QuantileTransformer(output_distribution="normal"))
+    if config["regression"] and (config["transformed_target"] == "log"): 
+        from sklearn.preprocessing import FunctionTransformer
+        f = lambda y: np.sign(y) * np.log(1 + np.abs(y))
+        finv = lambda yhat: np.sign(yhat) * (np.expm1(np.abs(yhat)))
+        model = TransformedTargetRegressor(model_raw, transformer=FunctionTransformer(f, inverse_func=finv))
     else:
         model = model_raw
 
-    if config["data__categorical"] and "one_hot_encoder" in config.keys() and config["one_hot_encoder"]:
-        preprocessor = ColumnTransformer([("one_hot", OneHotEncoder(categories="auto", handle_unknown="ignore"),
-                                           [i for i in range(x_train.shape[1]) if categorical_indicator[i]]),
-                                          ("numerical", "passthrough",
-                                           [i for i in range(x_train.shape[1]) if not categorical_indicator[i]])])
-        model = Pipeline(steps=[("preprocessor", preprocessor), ("model", model)])
+       # if config["data__categorical"] and "one_hot_encoder" in config.keys() and config["one_hot_encoder"]:
+       #     preprocessor = ColumnTransformer([("one_hot", OneHotEncoder(categories="auto", handle_unknown="ignore"),
+       #                                        [i for i in range(x_train.shape[1]) if categorical_indicator[i]]),
+       #                                       ("numerical", "passthrough",
+       #                                        [i for i in range(x_train.shape[1]) if not categorical_indicator[i]])])
+       #     #if config["model_type"] != "iterated":
+       #     #    model = Pipeline(steps=[("preprocessor", preprocessor), ("model", model)])
+       #     #else:
+       #     x_train = preprocessor.fit_transform(x_train)
+       #     x_val = preprocessor.transform(x_val)
+       #     model = Pipeline(steps=[("model", model)])
+       # else:
+        #model = Pipeline(steps=[("model", model)])
 
     if config["model_type"] == "iterated":
         L = config["bandwidth"]
         reg = config["ridge"]
         classification = not config["regression"]
+        if "svm" in config.keys():
+            use_svm = config["svm"]
+        else:
+            use_svm = False
+
+
+        if "threshold" in config.keys() and config["threshold"]:
+            threshold = True
+        else:
+            threshold = False
+
+        kernel = config["kernel"]
+        n_iters = config["n_iters"]
         
+        if "center_grads" in config.keys() and config["center_grads"]:
+            center = True
+        else:
+            center = False
+        
+
+        if "use_diagonal" in config.keys() and config["use_diagonal"]:
+            use_diagonal = True
+        else:
+            use_diagonal = False
+
         if config["kernel_solve"] == "eigenpro":
             model = eigenpro_rfm.train(x_train, y_train, x_val, y_val, L=L, classification=classification) # change 5
         elif config["kernel_solve"] == "lstsq":
-            model = rfm.train(x_train, y_train, x_val, y_val, L=L, reg=reg, classification=classification,
-                              use_lstsq=True)
+            rfm.train(model, x_train, y_train, X_val=x_val, y_val=y_val, L=L, reg=reg, 
+                                classification=classification, use_lstsq=True, use_svm=use_svm)
         else:
-            model = rfm.train(x_train, y_train, x_val, y_val, L=L, reg=reg, classification=classification) # change 5
+            model = rfm.train(model, x_train, y_train, x_val, y_val, L=L, reg=reg, iters=n_iters, 
+                                classification=classification, use_lstsq=False, 
+                                use_svm=use_svm, kernel=kernel,threshold=threshold, center=center, use_diagonal=use_diagonal)
         
     elif config["model_type"] == "tab_survey":
         x_val = x_train[int(len(x_train) * 0.8):]
